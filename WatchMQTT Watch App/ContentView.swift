@@ -108,7 +108,11 @@ struct ContentView: View {
         connection.stateUpdateHandler = { state in
             // Cancel once the framework has triggered the local network prompt.
             switch state {
-            case .ready, .failed, .cancelled:
+            case .ready:
+                connection.send(content: Data([0]), completion: .contentProcessed { _ in
+                    connection.cancel()
+                })
+            case .failed, .cancelled:
                 connection.cancel()
             default:
                 break
@@ -148,6 +152,7 @@ struct ContentView: View {
             }
         }
         conn.start(queue: .global())
+        conn.send(content: "ping".data(using: .utf8), completion: .contentProcessed { _ in })
     }
 
     // --- Updated connect/disconnect logic ---
