@@ -110,8 +110,7 @@ struct ContentView: View {
     }
 
     private func startReceiving() {
-        webSocketTask?.receive { [weak self] result in
-            guard let self = self else { return }
+        webSocketTask?.receive { result in
             DispatchQueue.main.async {
                 switch result {
                 case .failure(let error):
