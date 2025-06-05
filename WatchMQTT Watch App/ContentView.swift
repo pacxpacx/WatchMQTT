@@ -103,7 +103,7 @@ struct ContentView: View {
         }
         let task = URLSession.shared.webSocketTask(with: mqttUrl)
         webSocketTask = task
-        isConnected = true
+        isConnected = false
         task.resume()
         sendMQTTConnectPacket()
         startReceiving()
@@ -121,13 +121,27 @@ struct ContentView: View {
                     case .string(let str):
                         self.lastMQTTMessage = "Received: \(str)"
                     case .data(let data):
-                        self.lastMQTTMessage = "Received binary (\(data.count) bytes)"
+                        if data.count >= 4 && data[0] == 0x20 && data[1] == 0x02 {
+                            let status = data[3]
+                            if status == 0 {
+                                self.lastMQTTMessage = "MQTT CONNACK received"
+                                self.isConnected = true
+                                self.sendMQTTSubscribePacket()
+                            } else {
+                                self.lastMQTTMessage = "Connection refused: \(status)"
+                                self.isConnected = false
+                            }
+                        } else {
+                            self.lastMQTTMessage = "Received binary (\(data.count) bytes)"
+                        }
                     @unknown default:
                         self.lastMQTTMessage = "Unknown MQTT message"
                     }
                 }
             }
             if self.isConnected {
+                self.startReceiving()
+            } else if self.webSocketTask != nil {
                 self.startReceiving()
             }
         }
@@ -158,11 +172,9 @@ struct ContentView: View {
         let remainingLength = UInt8(variableHeader.count + payload.count)
         let connectPacket: [UInt8] = [0x10, remainingLength] + variableHeader + payload
 
-        webSocketTask?.send(.data(Data(connectPacket))) { [self] error in
+        webSocketTask?.send(.data(Data(connectPacket))) { error in
             if let error = error {
                 self.lastMQTTMessage = "CONNECT send error: \(error.localizedDescription)"
-            } else {
-                self.sendMQTTSubscribePacket()
             }
         }
     }
