@@ -40,7 +40,8 @@ class MQTTManager: ObservableObject {
             return
         }
 
-        let urlString = "ws://\(brokerAddress):\(port)\(webSocketPath)"
+        let sanitizedPath = webSocketPath.hasPrefix("/") ? webSocketPath : "/" + webSocketPath
+        let urlString = "ws://\(brokerAddress):\(port)\(sanitizedPath)"
         guard let url = URL(string: urlString) else {
             debugMessagePublisher.send("Invalid URL.")
             return

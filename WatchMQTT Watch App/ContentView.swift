@@ -105,7 +105,8 @@ struct ContentView: View {
             lastMQTTMessage = "Invalid port number."
             return
         }
-        let urlString = "ws://\(ipAddress):\(portValue)\(webSocketPath)"
+        let sanitizedPath = webSocketPath.hasPrefix("/") ? webSocketPath : "/" + webSocketPath
+        let urlString = "ws://\(ipAddress):\(portValue)\(sanitizedPath)"
         guard let mqttUrl = URL(string: urlString) else {
             lastMQTTMessage = "Invalid URL."
             return
