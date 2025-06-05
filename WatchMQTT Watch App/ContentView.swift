@@ -95,9 +95,60 @@ struct ContentView: View {
         }
     }
 
-    func requestLocalNetworkAccessIfNeeded() { /* ... unchanged ... */ }
-    func testAllLocalNetwork() { /* ... unchanged ... */ }
-    func testUDP() { /* ... unchanged ... */ }
+    // Request permission to access the local network. Without this the watch
+    // cannot open connections to LAN addresses and the broker connection will
+    // fail with an NECP policy error.
+    func requestLocalNetworkAccessIfNeeded() {
+        guard let host = IPv4Address(ipAddress), let portValue = UInt16(port) else {
+            return
+        }
+        let endpoint = NWEndpoint.hostPort(host: .ipv4(host), port: NWEndpoint.Port(rawValue: portValue)!)
+        let params = NWParameters.udp
+        let connection = NWConnection(to: endpoint, using: params)
+        connection.stateUpdateHandler = { state in
+            // Cancel once the framework has triggered the local network prompt.
+            switch state {
+            case .ready, .failed, .cancelled:
+                connection.cancel()
+            default:
+                break
+            }
+        }
+        connection.start(queue: .global())
+    }
+
+    /// Send a small UDP packet to trigger the local network permission prompt
+    /// and provide simple connectivity feedback in `connectionResult`.
+    func testAllLocalNetwork() {
+        isTesting = true
+        connectionResult = "Testing network…"
+        testUDP()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            self.isTesting = false
+        }
+    }
+
+    private func testUDP() {
+        guard let host = IPv4Address(ipAddress), let portValue = UInt16(port) else {
+            self.connectionResult = "Invalid address"
+            return
+        }
+
+        let endpoint = NWEndpoint.hostPort(host: .ipv4(host), port: NWEndpoint.Port(rawValue: portValue)!)
+        let params = NWParameters.udp
+        let conn = NWConnection(to: endpoint, using: params)
+        conn.stateUpdateHandler = { state in
+            if case .ready = state {
+                self.connectionResult = "UDP reachable"
+                conn.cancel()
+            }
+            if case .failed(let error) = state {
+                self.connectionResult = "UDP error: \(error.localizedDescription)"
+                conn.cancel()
+            }
+        }
+        conn.start(queue: .global())
+    }
 
     // --- Updated connect/disconnect logic ---
     func connectToMQTTBroker() {
