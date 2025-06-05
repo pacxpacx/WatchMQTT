@@ -130,6 +130,8 @@ struct ContentView: View {
                 case .failure(let error):
                     self.lastMQTTMessage = "MQTT WebSocket Error: \(error.localizedDescription)"
                     self.isConnected = false
+                    self.webSocketTask?.cancel(with: .goingAway, reason: nil)
+                    self.webSocketTask = nil
                 case .success(let message):
                     switch message {
                     case .string(let str):
@@ -152,11 +154,11 @@ struct ContentView: View {
                         self.lastMQTTMessage = "Unknown MQTT message"
                     }
                 }
-            }
-            if self.isConnected {
-                self.startReceiving()
-            } else if self.webSocketTask != nil {
-                self.startReceiving()
+                if self.isConnected {
+                    self.startReceiving()
+                } else if self.webSocketTask != nil {
+                    self.startReceiving()
+                }
             }
         }
     }

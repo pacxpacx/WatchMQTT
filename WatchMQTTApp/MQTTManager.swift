@@ -121,6 +121,9 @@ class MQTTManager: ObservableObject {
             case .failure(let error):
                 self?.debugMessagePublisher.send("Receive error: \(error.localizedDescription)")
                 self?.connectionStatusPublisher.send("Receive Error")
+                self?.isConnected = false
+                self?.webSocketTask?.cancel(with: .goingAway, reason: nil)
+                self?.webSocketTask = nil
             case .success(let message):
                 switch message {
                 case .data(let data):
