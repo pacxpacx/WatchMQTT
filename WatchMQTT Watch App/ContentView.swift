@@ -15,6 +15,19 @@ struct ContentView: View {
     @State private var isConnected = false
     @State private var webSocketTask: URLSessionWebSocketTask?
 
+    // Encode MQTT remaining length using variable-length format
+    private func encodeRemainingLength(_ len: Int) -> [UInt8] {
+        var value = len
+        var bytes: [UInt8] = []
+        repeat {
+            var byte = UInt8(value % 128)
+            value /= 128
+            if value > 0 { byte |= 0x80 }
+            bytes.append(byte)
+        } while value > 0
+        return bytes
+    }
+
     var body: some View {
         ScrollView {
             VStack(spacing: 12) {
@@ -169,8 +182,8 @@ struct ContentView: View {
         payload += mqttString(username)
         payload += mqttString(password)
 
-        let remainingLength = UInt8(variableHeader.count + payload.count)
-        let connectPacket: [UInt8] = [0x10, remainingLength] + variableHeader + payload
+        let remainingLength = variableHeader.count + payload.count
+        let connectPacket: [UInt8] = [0x10] + encodeRemainingLength(remainingLength) + variableHeader + payload
 
         webSocketTask?.send(.data(Data(connectPacket))) { error in
             if let error = error {
@@ -190,8 +203,8 @@ struct ContentView: View {
         let topicFilter = mqttString(topic)
         let subscribePayload: [UInt8] = topicFilter + [0x00]
         let identifierBytes: [UInt8] = [UInt8(packetIdentifier >> 8), UInt8(packetIdentifier & 0xFF)]
-        let remainingLength = UInt8(identifierBytes.count + subscribePayload.count)
-        let subscribePacket: [UInt8] = [0x82, remainingLength] + identifierBytes + subscribePayload
+        let remainingLength = identifierBytes.count + subscribePayload.count
+        let subscribePacket: [UInt8] = [0x82] + encodeRemainingLength(remainingLength) + identifierBytes + subscribePayload
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [self] in
             webSocketTask?.send(.data(Data(subscribePacket))) { error in
