@@ -8,7 +8,7 @@ struct ContentView: View {
     @State private var autoTestDone = false
     @State private var ipAddress: String = "192.168.33.111"
     @State private var port: String = "9001"
-    @State private var webSocketPath: String = "/"
+    @State private var webSocketPath: String = "/ws"
     @State private var topic: String = "home/button"
 
     // MQTT/WebSocket connection state
@@ -115,7 +115,9 @@ struct ContentView: View {
         if isConnected {
             disconnectFromMQTTBroker()
         }
-        let task = URLSession.shared.webSocketTask(with: mqttUrl)
+        var request = URLRequest(url: mqttUrl)
+        request.addValue("mqtt", forHTTPHeaderField: "Sec-WebSocket-Protocol")
+        let task = URLSession.shared.webSocketTask(with: request)
         webSocketTask = task
         isConnected = false
         task.resume()

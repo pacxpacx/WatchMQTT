@@ -8,7 +8,7 @@ struct ContentView: View {
     @State private var cancellables = Set<AnyCancellable>()
     @State private var brokerAddress: String = "192.168.33.111"
     @State private var brokerPort: String = "9001"
-    @State private var webSocketPath: String = "/"
+    @State private var webSocketPath: String = "/ws"
     @State private var subscribeTopic: String = "home/button"
 
     var body: some View {
@@ -29,7 +29,7 @@ struct ContentView: View {
                     
                     Text("WebSocket Path")
                         .font(.caption)
-                    TextField("e.g. /", text: $webSocketPath)
+                    TextField("e.g. /ws", text: $webSocketPath)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
 
                     Text("Subscribe Topic")

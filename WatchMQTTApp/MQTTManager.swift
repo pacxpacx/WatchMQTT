@@ -13,7 +13,7 @@ class MQTTManager: ObservableObject {
     @Published var clientID: String = "Watch"
     @Published var username: String = "test"
     @Published var password: String = "test"
-    @Published var webSocketPath: String = "/mqtt"
+    @Published var webSocketPath: String = "/ws"
     @Published var topic: String = "home/button"
 
     private func encodeRemainingLength(_ len: Int) -> [UInt8] {
@@ -48,7 +48,9 @@ class MQTTManager: ObservableObject {
         }
 
         let session = URLSession(configuration: .default)
-        let task = session.webSocketTask(with: url)
+        var request = URLRequest(url: url)
+        request.addValue("mqtt", forHTTPHeaderField: "Sec-WebSocket-Protocol")
+        let task = session.webSocketTask(with: request)
         self.webSocketTask = task
         debugMessagePublisher.send("WebSocket task created with URL: \(urlString)")
         task.resume()
