@@ -6,10 +6,6 @@
 	objectVersion = 77;
 	objects = {
 
-/* Begin PBXBuildFile section */
-		E40FC0872DE5DEE500A94A01 /* WatchMQTT Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = E40FC0862DE5DEE500A94A01 /* WatchMQTT Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-/* End PBXBuildFile section */
-
 /* Begin PBXContainerItemProxy section */
 		E40FC0882DE5DEE500A94A01 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -27,7 +23,6 @@
 			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
 			dstSubfolderSpec = 16;
 			files = (
-				E40FC0872DE5DEE500A94A01 /* WatchMQTT Watch App.app in Embed Watch Content */,
 			);
 			name = "Embed Watch Content";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -37,18 +32,54 @@
 /* Begin PBXFileReference section */
 		E40FC0802DE5DEE500A94A01 /* WatchMQTT.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WatchMQTT.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E40FC0862DE5DEE500A94A01 /* WatchMQTT Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "WatchMQTT Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E4A075562DE63C130049AD85 /* WatchMQTTApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WatchMQTTApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		E40FC0BC2DE601EC00A94A01 /* Exceptions for "WatchMQTT Watch App" folder in "WatchMQTT Watch App" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = E40FC0852DE5DEE500A94A01 /* WatchMQTT Watch App */;
+		};
+		E4A075682DE66B430049AD85 /* Exceptions for "WatchMQTTApp" folder in "WatchMQTTApp" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = E4A075552DE63C130049AD85 /* WatchMQTTApp */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		E40FC08A2DE5DEE500A94A01 /* WatchMQTT Watch App */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				E40FC0BC2DE601EC00A94A01 /* Exceptions for "WatchMQTT Watch App" folder in "WatchMQTT Watch App" target */,
+			);
 			path = "WatchMQTT Watch App";
+			sourceTree = "<group>";
+		};
+		E4A075572DE63C140049AD85 /* WatchMQTTApp */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				E4A075682DE66B430049AD85 /* Exceptions for "WatchMQTTApp" folder in "WatchMQTTApp" target */,
+			);
+			path = WatchMQTTApp;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		E40FC0832DE5DEE500A94A01 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E4A075532DE63C130049AD85 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -62,6 +93,7 @@
 			isa = PBXGroup;
 			children = (
 				E40FC08A2DE5DEE500A94A01 /* WatchMQTT Watch App */,
+				E4A075572DE63C140049AD85 /* WatchMQTTApp */,
 				E40FC0812DE5DEE500A94A01 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -71,6 +103,7 @@
 			children = (
 				E40FC0802DE5DEE500A94A01 /* WatchMQTT.app */,
 				E40FC0862DE5DEE500A94A01 /* WatchMQTT Watch App.app */,
+				E4A075562DE63C130049AD85 /* WatchMQTTApp.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -119,6 +152,28 @@
 			productReference = E40FC0862DE5DEE500A94A01 /* WatchMQTT Watch App.app */;
 			productType = "com.apple.product-type.application";
 		};
+		E4A075552DE63C130049AD85 /* WatchMQTTApp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E4A075632DE63C150049AD85 /* Build configuration list for PBXNativeTarget "WatchMQTTApp" */;
+			buildPhases = (
+				E4A075522DE63C130049AD85 /* Sources */,
+				E4A075532DE63C130049AD85 /* Frameworks */,
+				E4A075542DE63C130049AD85 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				E4A075572DE63C140049AD85 /* WatchMQTTApp */,
+			);
+			name = WatchMQTTApp;
+			packageProductDependencies = (
+			);
+			productName = WatchMQTTApp;
+			productReference = E4A075562DE63C130049AD85 /* WatchMQTTApp.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -135,6 +190,9 @@
 					E40FC0852DE5DEE500A94A01 = {
 						CreatedOnToolsVersion = 16.2;
 					};
+					E4A075552DE63C130049AD85 = {
+						CreatedOnToolsVersion = 16.2;
+					};
 				};
 			};
 			buildConfigurationList = E40FC07D2DE5DEE500A94A01 /* Build configuration list for PBXProject "WatchMQTT" */;
@@ -146,6 +204,8 @@
 			);
 			mainGroup = E40FC0792DE5DEE500A94A01;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = E40FC0812DE5DEE500A94A01 /* Products */;
 			projectDirPath = "";
@@ -153,6 +213,7 @@
 			targets = (
 				E40FC07F2DE5DEE500A94A01 /* WatchMQTT */,
 				E40FC0852DE5DEE500A94A01 /* WatchMQTT Watch App */,
+				E4A075552DE63C130049AD85 /* WatchMQTTApp */,
 			);
 		};
 /* End PBXProject section */
@@ -172,10 +233,24 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		E4A075542DE63C130049AD85 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		E40FC0822DE5DEE500A94A01 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E4A075522DE63C130049AD85 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -312,21 +387,25 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "WatchMQTT Watch App/WatchMQTT Watch App.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"WatchMQTT Watch App/Preview Content\"";
 				DEVELOPMENT_TEAM = Z8Y3M6THR2;
 				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "WatchMQTT Watch App/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = WatchMQTT;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				INFOPLIST_KEY_WKWatchOnly = YES;
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = MIA2.WatchMQTTApp;
+				INFOPLIST_KEY_WKRunsIndependentlyOfCompanionApp = YES;
+				INFOPLIST_KEY_WKWatchOnly = NO;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = MIA2.WatchMQTT.watchkitapp;
+				PRODUCT_BUNDLE_IDENTIFIER = MIA2.WatchMQTTApp.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
@@ -342,21 +421,25 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "WatchMQTT Watch App/WatchMQTT Watch App.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"WatchMQTT Watch App/Preview Content\"";
 				DEVELOPMENT_TEAM = Z8Y3M6THR2;
 				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "WatchMQTT Watch App/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = WatchMQTT;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				INFOPLIST_KEY_WKWatchOnly = YES;
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = MIA2.WatchMQTTApp;
+				INFOPLIST_KEY_WKRunsIndependentlyOfCompanionApp = YES;
+				INFOPLIST_KEY_WKWatchOnly = NO;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = MIA2.WatchMQTT.watchkitapp;
+				PRODUCT_BUNDLE_IDENTIFIER = MIA2.WatchMQTTApp.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
@@ -399,6 +482,73 @@
 			};
 			name = Release;
 		};
+		E4A075612DE63C150049AD85 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = WatchMQTTApp/WatchMQTTApp.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"WatchMQTTApp/Preview Content\"";
+				DEVELOPMENT_TEAM = Z8Y3M6THR2;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = WatchMQTTApp/Info.plist;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = MIA2.WatchMQTTApp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		E4A075622DE63C150049AD85 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = WatchMQTTApp/WatchMQTTApp.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"WatchMQTTApp/Preview Content\"";
+				DEVELOPMENT_TEAM = Z8Y3M6THR2;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = WatchMQTTApp/Info.plist;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = MIA2.WatchMQTTApp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -425,6 +575,15 @@
 			buildConfigurations = (
 				E40FC09B2DE5DEE700A94A01 /* Debug */,
 				E40FC09C2DE5DEE700A94A01 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E4A075632DE63C150049AD85 /* Build configuration list for PBXNativeTarget "WatchMQTTApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E4A075612DE63C150049AD85 /* Debug */,
+				E4A075622DE63C150049AD85 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
