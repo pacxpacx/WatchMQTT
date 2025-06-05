@@ -9,6 +9,7 @@ struct ContentView: View {
     @State private var brokerAddress: String = "192.168.33.111"
     @State private var brokerPort: String = "9001"
     @State private var webSocketPath: String = "/"
+    @State private var subscribeTopic: String = "home/button"
 
     var body: some View {
         ScrollView {
@@ -30,6 +31,11 @@ struct ContentView: View {
                         .font(.caption)
                     TextField("e.g. /", text: $webSocketPath)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
+
+                    Text("Subscribe Topic")
+                        .font(.caption)
+                    TextField("e.g. home/button", text: $subscribeTopic)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
                 }
                 .padding(.bottom, 10)
 
@@ -44,6 +50,7 @@ struct ContentView: View {
                 HStack(spacing: 20) {
                     Button(action: {
                         self.debugMessages.append("WebSocket full URL string: ws://\(brokerAddress):\(brokerPort)\(webSocketPath)")
+                        mqttManager.topic = subscribeTopic
                         mqttManager.connect(broker: brokerAddress, port: brokerPort, path: webSocketPath)
                     }) {
                         Text("Connect")

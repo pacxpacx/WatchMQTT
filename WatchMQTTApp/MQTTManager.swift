@@ -14,6 +14,19 @@ class MQTTManager: ObservableObject {
     @Published var username: String = "test"
     @Published var password: String = "test"
     @Published var webSocketPath: String = "/mqtt"
+    @Published var topic: String = "home/button"
+
+    private func encodeRemainingLength(_ len: Int) -> [UInt8] {
+        var value = len
+        var bytes: [UInt8] = []
+        repeat {
+            var byte = UInt8(value % 128)
+            value /= 128
+            if value > 0 { byte |= 0x80 }
+            bytes.append(byte)
+        } while value > 0
+        return bytes
+    }
 
     func connect(broker: String, port: String, path: String? = nil) {
         self.brokerAddress = broker
@@ -77,17 +90,6 @@ class MQTTManager: ObservableObject {
 
         // Remaining Length
         let remainingLength = variableHeader.count + payload.count
-        func encodeRemainingLength(_ len: Int) -> [UInt8] {
-            var value = len
-            var bytes: [UInt8] = []
-            repeat {
-                var byte = UInt8(value % 128)
-                value /= 128
-                if value > 0 { byte |= 0x80 }
-                bytes.append(byte)
-            } while value > 0
-            return bytes
-        }
 
         var packet: [UInt8] = [0x10] // CONNECT
         packet += encodeRemainingLength(remainingLength)
@@ -130,6 +132,7 @@ class MQTTManager: ObservableObject {
                             self?.isConnected = true
                             self?.connectionStatusPublisher.send("Connected")
                             self?.debugMessagePublisher.send("MQTT CONNACK received, connection accepted")
+                            self?.sendMQTTSubscribePacket()
                         } else {
                             self?.isConnected = false
                             self?.connectionStatusPublisher.send("Connection Refused: \(connackStatus)")
@@ -143,6 +146,33 @@ class MQTTManager: ObservableObject {
                 }
                 // Continue to receive next message
                 self?.receiveLoop()
+            }
+        }
+    }
+
+    private func sendMQTTSubscribePacket() {
+        func encodeString(_ string: String) -> [UInt8] {
+            let utf8 = Array(string.utf8)
+            let len = UInt16(utf8.count)
+            return [UInt8(len >> 8), UInt8(len & 0xFF)] + utf8
+        }
+
+        let packetIdentifier: UInt16 = 1
+        let topicFilter = encodeString(topic)
+        let payload: [UInt8] = topicFilter + [0x00] // QoS 0
+        let identifierBytes: [UInt8] = [UInt8(packetIdentifier >> 8), UInt8(packetIdentifier & 0xFF)]
+        let remainingLength = identifierBytes.count + payload.count
+        var packet: [UInt8] = [0x82]
+        packet += encodeRemainingLength(remainingLength)
+        packet += identifierBytes
+        packet += payload
+
+        let data = Data(packet)
+        webSocketTask?.send(.data(data)) { [weak self] error in
+            if let error = error {
+                self?.debugMessagePublisher.send("Failed to send MQTT SUBSCRIBE: \(error.localizedDescription)")
+            } else {
+                self?.debugMessagePublisher.send("MQTT SUBSCRIBE packet sent")
             }
         }
     }
