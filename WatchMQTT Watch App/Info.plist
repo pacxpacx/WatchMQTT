@@ -36,7 +36,7 @@
     <key>WKCompanionAppBundleIdentifier</key>
     <string>MIA2.WatchMQTTApp</string>
     <key>WKRunsIndependentlyOfCompanionApp</key>
-    <true/>
+    <false/>
     <key>WKApplication</key>
     <true/>
     <key>NSLocalNetworkUsageDescription</key>

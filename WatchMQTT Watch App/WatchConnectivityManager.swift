@@ -1,0 +1,52 @@
+import Foundation
+import WatchConnectivity
+
+class WatchConnectivityManager: NSObject, ObservableObject, WCSessionDelegate {
+    static let shared = WatchConnectivityManager()
+    @Published var lastMessage: String = ""
+
+    override private init() {
+        super.init()
+        if WCSession.isSupported() {
+            let session = WCSession.default
+            session.delegate = self
+            session.activate()
+        }
+    }
+
+    func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {}
+    func sessionReachabilityDidChange(_ session: WCSession) {}
+
+    func session(_ session: WCSession, didReceiveMessage message: [String : Any]) {
+        if let text = message["message"] as? String {
+            DispatchQueue.main.async {
+                self.lastMessage = text
+            }
+        }
+    }
+
+    func session(_ session: WCSession, didReceiveMessage message: [String : Any], replyHandler: @escaping ([String : Any]) -> Void) {
+        if let text = message["message"] as? String {
+            DispatchQueue.main.async {
+                self.lastMessage = text
+            }
+        }
+        replyHandler([:])
+    }
+
+    func session(_ session: WCSession, didReceiveApplicationContext applicationContext: [String : Any]) {
+        if let text = applicationContext["message"] as? String {
+            DispatchQueue.main.async {
+                self.lastMessage = text
+            }
+        }
+    }
+
+    func session(_ session: WCSession, didReceiveUserInfo userInfo: [String : Any] = [:]) {
+        if let text = userInfo["message"] as? String {
+            DispatchQueue.main.async {
+                self.lastMessage = text
+            }
+        }
+    }
+}
