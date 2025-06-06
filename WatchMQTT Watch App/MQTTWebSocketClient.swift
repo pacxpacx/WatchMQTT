@@ -114,7 +114,7 @@ class MQTTWebSocketClient: NSObject {
             }
         }
     }
-    
+
     func sendConnectAndSubscribe() {
         let clientId = self.clientId
         let username = self.username
