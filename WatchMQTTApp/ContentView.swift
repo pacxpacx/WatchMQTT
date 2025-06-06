@@ -67,6 +67,15 @@ struct ContentView: View {
                             .cornerRadius(8)
                     }
                     Button(action: {
+                        self.debugMessages.append("Sending test message to watch")
+                        WatchConnectivityManager.shared.send(message: "Test from iPhone")
+                    }) {
+                        Text("Send Test")
+                            .padding()
+                            .background(Color.green.opacity(0.2))
+                            .cornerRadius(8)
+                    }
+                    Button(action: {
                         self.debugMessages = ["No messages yet"]
                     }) {
                         Text("Clear Debug")
