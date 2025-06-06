@@ -26,7 +26,7 @@ struct ContentView: View {
                     TextField("e.g. 80", text: $brokerPort)
                         .keyboardType(.decimalPad)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
-
+                    
                     Text("WebSocket Path")
                         .font(.caption)
                     TextField("e.g. /ws", text: $webSocketPath)
