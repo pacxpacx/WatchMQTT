@@ -99,10 +99,17 @@ class MQTTWebSocketClient: NSObject {
                 switch message {
                 case .string(let text):
                     self.delegate?.mqttClient(self, didReceiveMessage: text)
-                default:
+                case .data(let data):
+                    if let str = String(data: data, encoding: .utf8) {
+                        self.delegate?.mqttClient(self, didReceiveMessage: str)
+                    } else {
+                        let hex = data.map { String(format: "%02X", $0) }.joined(separator: " ")
+                        self.delegate?.mqttClient(self, didReceiveMessage: hex)
+                    }
+                @unknown default:
                     break
                 }
-                // Continue receiving only on successful message
+                // Continue receiving messages
                 self.receive()
             }
         }
