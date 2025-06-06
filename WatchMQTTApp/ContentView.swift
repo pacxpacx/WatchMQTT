@@ -7,7 +7,7 @@ struct ContentView: View {
     @State private var debugMessages: [String] = ["No messages yet"]
     @State private var cancellables = Set<AnyCancellable>()
     @State private var brokerAddress: String = "192.168.33.111"
-    @State private var brokerPort: String = "9001"
+    @State private var brokerPort: String = "80"
     @State private var webSocketPath: String = "/ws"
     @State private var subscribeTopic: String = "home/button"
 
@@ -23,7 +23,7 @@ struct ContentView: View {
 
                     Text("Port")
                         .font(.caption)
-                    TextField("e.g. 9001", text: $brokerPort)
+                    TextField("e.g. 80", text: $brokerPort)
                         .keyboardType(.decimalPad)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                     

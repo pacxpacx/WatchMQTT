@@ -14,7 +14,7 @@ class MQTTHandler: NSObject, ObservableObject, MQTTWebSocketClientDelegate {
         self.username = username
         self.password = password
         super.init()
-        let url = URL(string: "ws://192.168.33.111:9001")!  // Replace with your broker address
+        let url = URL(string: "ws://192.168.33.111:80/ws")!  // Replace with your broker address
         client = MQTTWebSocketClient(
             url: url,
             clientId: "WatchMQTT-\(UUID().uuidString.prefix(8))",
@@ -37,7 +37,7 @@ class MQTTHandler: NSObject, ObservableObject, MQTTWebSocketClientDelegate {
         if let password = password {
             self.password = password
         }
-        let url = URL(string: "ws://192.168.33.111:9001")!  // Replace with your broker address
+        let url = URL(string: "ws://192.168.33.111:80/ws")!  // Replace with your broker address
         client = MQTTWebSocketClient(
             url: url,
             clientId: "WatchMQTT-\(UUID().uuidString.prefix(8))",

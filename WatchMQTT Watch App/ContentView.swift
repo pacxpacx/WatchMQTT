@@ -7,7 +7,7 @@ struct ContentView: View {
     @State private var lastMQTTMessage: String = ""
     @State private var autoTestDone = false
     @State private var ipAddress: String = "192.168.33.111"
-    @State private var port: String = "9001"
+    @State private var port: String = "80"
     @State private var webSocketPath: String = "/ws"
     @State private var topic: String = "home/button"
 

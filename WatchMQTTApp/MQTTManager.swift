@@ -9,7 +9,7 @@ class MQTTManager: ObservableObject {
     let connectionStatusPublisher = PassthroughSubject<String, Never>()
 
     @Published var brokerAddress: String = "192.168.33.111"
-    @Published var port: String = "9001"
+    @Published var port: String = "80"
     @Published var clientID: String = "Watch"
     @Published var username: String = "test"
     @Published var password: String = "test"

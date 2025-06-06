@@ -76,7 +76,10 @@ class MQTTWebSocketClient: NSObject {
 
     func connect() {
         let session = URLSession(configuration: .default, delegate: self, delegateQueue: OperationQueue())
-        webSocketTask = session.webSocketTask(with: url)
+        var request = URLRequest(url: url)
+        // Set MQTT subprotocol so brokers accept this WebSocket for MQTT traffic
+        request.addValue("mqtt", forHTTPHeaderField: "Sec-WebSocket-Protocol")
+        webSocketTask = session.webSocketTask(with: request)
         webSocketTask?.resume()
         receive()
     }
