@@ -25,8 +25,4 @@ class WatchConnectivityManager: NSObject, WCSessionDelegate {
 
     // WCSessionDelegate stubs
     func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {}
-    func sessionDidBecomeInactive(_ session: WCSession) {}
-    func sessionDidDeactivate(_ session: WCSession) {
-        WCSession.default.activate()
-    }
 }
