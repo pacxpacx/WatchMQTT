@@ -10,6 +10,7 @@ struct ContentView: View {
     @State private var brokerPort: String = "80"
     @State private var webSocketPath: String = "/ws"
     @State private var subscribeTopic: String = "home/button"
+    @State private var messageToWatch: String = ""
 
     var body: some View {
         ScrollView {
@@ -72,6 +73,25 @@ struct ContentView: View {
                         Text("Clear Debug")
                             .padding()
                             .background(Color.gray.opacity(0.2))
+                            .cornerRadius(8)
+                    }
+                }
+
+                HStack(spacing: 12) {
+                    TextField("Message to watch", text: $messageToWatch)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                    Button(action: {
+                        WatchConnectivityManager.shared.send(message: messageToWatch)
+                        let log = "Sent to watch: \(messageToWatch)"
+                        if self.debugMessages == ["No messages yet"] {
+                            self.debugMessages = [log]
+                        } else {
+                            self.debugMessages.append(log)
+                        }
+                    }) {
+                        Text("Send to Watch")
+                            .padding()
+                            .background(Color.green.opacity(0.2))
                             .cornerRadius(8)
                     }
                 }
