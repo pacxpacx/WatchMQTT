@@ -106,19 +106,20 @@ struct ContentView: View {
         let params = NWParameters.udp
         let connection = NWConnection(to: endpoint, using: params)
         connection.stateUpdateHandler = { state in
-            // Cancel once the framework has triggered the local network prompt.
             switch state {
             case .ready:
-                connection.send(content: Data([0]), completion: .contentProcessed { _ in
-                    connection.cancel()
-                })
-            case .failed, .cancelled:
+                self.connectionResult = "UDP reachable"
+                connection.cancel()
+            case .failed:
                 connection.cancel()
             default:
                 break
             }
         }
         connection.start(queue: .global())
+        // Send a datagram immediately so the OS registers a network access
+        // attempt even if the connection never becomes ready.
+        connection.send(content: Data([0]), completion: .contentProcessed { _ in })
     }
 
     /// Send a small UDP packet to trigger the local network permission prompt
@@ -144,7 +145,6 @@ struct ContentView: View {
         conn.stateUpdateHandler = { state in
             switch state {
             case .ready:
-                conn.send(content: "ping".data(using: .utf8), completion: .contentProcessed { _ in })
                 self.connectionResult = "UDP reachable"
                 conn.cancel()
             case .failed(let error):
@@ -155,6 +155,7 @@ struct ContentView: View {
             }
         }
         conn.start(queue: .global())
+        conn.send(content: "ping".data(using: .utf8), completion: .contentProcessed { _ in })
     }
 
     // --- Updated connect/disconnect logic ---
