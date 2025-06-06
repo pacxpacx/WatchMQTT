@@ -24,6 +24,19 @@ class MQTTWebSocketClient: NSObject {
     private var topic: String
     weak var delegate: MQTTWebSocketClientDelegate?
 
+    // Encode MQTT remaining length using the variable-length format
+    private func encodeRemainingLength(_ len: Int) -> [UInt8] {
+        var value = len
+        var bytes: [UInt8] = []
+        repeat {
+            var byte = UInt8(value % 128)
+            value /= 128
+            if value > 0 { byte |= 0x80 }
+            bytes.append(byte)
+        } while value > 0
+        return bytes
+    }
+
     init(url: URL, clientId: String, username: String, password: String, topic: String) {
         self.url = url
         self.clientId = clientId
@@ -48,8 +61,8 @@ class MQTTWebSocketClient: NSObject {
         let topicFilter = mqttString(newTopic)
         let subscribePayload: [UInt8] = topicFilter + [0x00] // QoS 0
         let subscribePacketIdentifier: [UInt8] = [UInt8(packetIdentifier >> 8), UInt8(packetIdentifier & 0xFF)]
-        let subscribeRemainingLength = UInt8(subscribePacketIdentifier.count + subscribePayload.count)
-        let subscribeFixedHeader: [UInt8] = [0x82, subscribeRemainingLength]
+        let subscribeRemainingLength = subscribePacketIdentifier.count + subscribePayload.count
+        let subscribeFixedHeader: [UInt8] = [0x82] + encodeRemainingLength(subscribeRemainingLength)
         let subscribePacket = subscribeFixedHeader + subscribePacketIdentifier + subscribePayload
 
         self.webSocketTask?.send(.data(Data(subscribePacket))) { error in
@@ -114,16 +127,16 @@ class MQTTWebSocketClient: NSObject {
         connectPayload += mqttString(username)
         connectPayload += mqttString(password)
 
-        let connectRemainingLength = UInt8(connectVariableHeader.count + connectPayload.count)
-        let connectFixedHeader: [UInt8] = [0x10, connectRemainingLength]
+        let connectRemainingLength = connectVariableHeader.count + connectPayload.count
+        let connectFixedHeader: [UInt8] = [0x10] + encodeRemainingLength(connectRemainingLength)
         let connectPacket = connectFixedHeader + connectVariableHeader + connectPayload
 
         // SUBSCRIBE Packet (to topic "home/button", QoS 0)
         let topicFilter = mqttString(topic)
         let subscribePayload: [UInt8] = topicFilter + [0x00] // QoS 0
         let subscribePacketIdentifier: [UInt8] = [UInt8(packetIdentifier >> 8), UInt8(packetIdentifier & 0xFF)]
-        let subscribeRemainingLength = UInt8(subscribePacketIdentifier.count + subscribePayload.count)
-        let subscribeFixedHeader: [UInt8] = [0x82, subscribeRemainingLength]
+        let subscribeRemainingLength = subscribePacketIdentifier.count + subscribePayload.count
+        let subscribeFixedHeader: [UInt8] = [0x82] + encodeRemainingLength(subscribeRemainingLength)
         let subscribePacket = subscribeFixedHeader + subscribePacketIdentifier + subscribePayload
 
         // Send CONNECT

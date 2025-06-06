@@ -6,8 +6,6 @@
     <array>
         <string>_mqtt._tcp</string>
     </array>
-    <key>NSFileProviderDomainUsageDescription</key>
-    <string>6.0</string>
     <key>CFBundleDisplayName</key>
     <string>WatchMQTT</string>
     <key>CFBundleExecutable</key>
