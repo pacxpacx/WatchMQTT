@@ -177,8 +177,10 @@ struct ContentView: View {
         webSocketTask = task
         isConnected = false
         task.resume()
-        sendMQTTConnectPacket()
-        startReceiving()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            self.sendMQTTConnectPacket()
+            self.startReceiving()
+        }
     }
 
     private func startReceiving() {
