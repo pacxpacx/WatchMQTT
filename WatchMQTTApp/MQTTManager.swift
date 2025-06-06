@@ -1,5 +1,9 @@
 import Foundation
 import Combine
+import WatchConnectivity
+
+/// Handles the MQTT connection on iOS and forwards received messages to the
+/// watch via ``WatchConnectivityManager``.
 
 class MQTTManager: ObservableObject {
     @Published var isConnected = false
@@ -26,6 +30,22 @@ class MQTTManager: ObservableObject {
             bytes.append(byte)
         } while value > 0
         return bytes
+    }
+
+    /// Decode the MQTT remaining length field starting at `index`.
+    /// Returns the value and the number of bytes consumed.
+    private func decodeRemainingLength(_ data: [UInt8], index: inout Int) -> Int {
+        var multiplier = 1
+        var value = 0
+        var encodedByte: UInt8 = 0
+        repeat {
+            guard index < data.count else { return 0 }
+            encodedByte = data[index]
+            value += Int(encodedByte & 127) * multiplier
+            multiplier *= 128
+            index += 1
+        } while (encodedByte & 128) != 0 && index < data.count
+        return value
     }
 
     func connect(broker: String, port: String, path: String? = nil) {
@@ -149,6 +169,20 @@ class MQTTManager: ObservableObject {
                             self?.isConnected = false
                             self?.connectionStatusPublisher.send("Connection Refused: \(connackStatus)")
                             self?.debugMessagePublisher.send("MQTT CONNACK refused, code: \(connackStatus)")
+                        }
+                    } else if data.count > 2 && (data[0] & 0xF0) == 0x30 {
+                        // Basic PUBLISH decoding for QoS 0 messages
+                        var idx = 1
+                        _ = self?.decodeRemainingLength(Array(data), index: &idx)
+                        guard idx + 2 <= data.count else { break }
+                        let topicLength = Int(data[idx]) << 8 | Int(data[idx+1])
+                        idx += 2 + topicLength
+                        if idx <= data.count {
+                            let payload = data[idx..<data.count]
+                            if let text = String(data: payload, encoding: .utf8) {
+                                self?.debugMessagePublisher.send("MQTT message: \(text)")
+                                WatchConnectivityManager.shared.send(message: text)
+                            }
                         }
                     }
                 case .string(let str):
