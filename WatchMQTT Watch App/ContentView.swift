@@ -142,17 +142,19 @@ struct ContentView: View {
         let params = NWParameters.udp
         let conn = NWConnection(to: endpoint, using: params)
         conn.stateUpdateHandler = { state in
-            if case .ready = state {
+            switch state {
+            case .ready:
+                conn.send(content: "ping".data(using: .utf8), completion: .contentProcessed { _ in })
                 self.connectionResult = "UDP reachable"
                 conn.cancel()
-            }
-            if case .failed(let error) = state {
+            case .failed(let error):
                 self.connectionResult = "UDP error: \(error.localizedDescription)"
                 conn.cancel()
+            default:
+                break
             }
         }
         conn.start(queue: .global())
-        conn.send(content: "ping".data(using: .utf8), completion: .contentProcessed { _ in })
     }
 
     // --- Updated connect/disconnect logic ---
@@ -167,9 +169,11 @@ struct ContentView: View {
             lastMQTTMessage = "Invalid URL."
             return
         }
-        // If already connected, disconnect first
-        if isConnected {
-            disconnectFromMQTTBroker()
+        // Cancel any existing connection before starting a new one
+        if let task = webSocketTask {
+            task.cancel(with: .goingAway, reason: nil)
+            webSocketTask = nil
+            isConnected = false
         }
         var request = URLRequest(url: mqttUrl)
         request.addValue("mqtt", forHTTPHeaderField: "Sec-WebSocket-Protocol")
