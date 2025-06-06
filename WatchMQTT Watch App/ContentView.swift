@@ -1,5 +1,6 @@
 import SwiftUI
 import Network
+import WatchConnectivity
 
 struct ContentView: View {
     @State private var connectionResult: String = ""
@@ -14,6 +15,7 @@ struct ContentView: View {
     // MQTT/WebSocket connection state
     @State private var isConnected = false
     @State private var webSocketTask: URLSessionWebSocketTask?
+    @ObservedObject private var phoneMessages = WatchConnectivityManager.shared
 
     // Encode MQTT remaining length using variable-length format
     private func encodeRemainingLength(_ len: Int) -> [UInt8] {
@@ -75,6 +77,15 @@ struct ContentView: View {
                 Text("Last MQTT Message:")
                     .font(.subheadline)
                 Text(lastMQTTMessage.isEmpty ? "None yet" : lastMQTTMessage)
+                    .font(.footnote)
+                    .multilineTextAlignment(.center)
+                    .frame(maxWidth: .infinity)
+                    .padding(4)
+                    .background(Color.gray.opacity(0.1))
+                    .cornerRadius(8)
+                Text("From Phone:")
+                    .font(.subheadline)
+                Text(phoneMessages.lastMessage.isEmpty ? "No phone data" : phoneMessages.lastMessage)
                     .font(.footnote)
                     .multilineTextAlignment(.center)
                     .frame(maxWidth: .infinity)
