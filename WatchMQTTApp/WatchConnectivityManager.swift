@@ -25,8 +25,12 @@ class WatchConnectivityManager: NSObject, WCSessionDelegate {
 
     // WCSessionDelegate stubs
     func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {}
+#if os(iOS)
+    // These callbacks are only available on iOS. Wrapping them ensures the file
+    // can be included in the watch target without build errors.
     func sessionDidBecomeInactive(_ session: WCSession) {}
     func sessionDidDeactivate(_ session: WCSession) {
         WCSession.default.activate()
     }
+#endif
 }
