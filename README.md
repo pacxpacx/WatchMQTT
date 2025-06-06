@@ -1,9 +1,5 @@
 Simple watch and phone apps for receiving MQTT messages over a WebSocket connection.
 
-The phone app now relays received MQTT payloads to the watch using
-`WatchConnectivity`. This allows the watch to display messages even when it
-cannot reach the broker directly.
+The watch no longer opens its own MQTT connection. Instead the phone app forwards any MQTT PUBLISH payloads it receives to the watch with `WatchConnectivity` so the watch can display them when both devices share the same Wi‑Fi network.
 
-Both apps now send proper MQTT `CONNECT` and `SUBSCRIBE` packets after the socket is opened so brokers will forward messages correctly. The watch UI lets you specify a WebSocket path (default `/ws`) and both apps default to port `80`. Paths lacking the leading slash are automatically fixed and the watch app waits for the broker's `CONNACK` before reporting that it is connected. WebSocket connections include the `Sec-WebSocket-Protocol: mqtt` header so brokers requiring the MQTT subprotocol accept the handshake. A tiny UDP datagram is sent on launch—and again when requesting access—to ensure the local network permission prompt appears even if the connection fails.
-
-When opening a WebSocket on watchOS, the app waits briefly before sending the MQTT CONNECT packet so the socket is fully established.
+The phone app still sends proper MQTT `CONNECT` and `SUBSCRIBE` packets after opening the WebSocket so brokers accept the connection. The WebSocket handshake includes `Sec-WebSocket-Protocol: mqtt`.
