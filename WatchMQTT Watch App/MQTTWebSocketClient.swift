@@ -94,6 +94,7 @@ class MQTTWebSocketClient: NSObject {
             switch result {
             case .failure(let error):
                 print("WebSocket receive failed: \(error)")
+                self.delegate?.mqttClientDidDisconnect(self)
             case .success(let message):
                 switch message {
                 case .string(let text):
@@ -101,8 +102,9 @@ class MQTTWebSocketClient: NSObject {
                 default:
                     break
                 }
+                // Continue receiving only on successful message
+                self.receive()
             }
-            self.receive()
         }
     }
     
