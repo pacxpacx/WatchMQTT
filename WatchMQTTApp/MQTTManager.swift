@@ -30,10 +30,16 @@ class MQTTManager: ObservableObject {
 
     func connect(broker: String, port: String, path: String? = nil) {
         self.brokerAddress = broker
-        self.port = port
         if let path = path {
             self.webSocketPath = path
         }
+
+        guard let portInt = Int(port), portInt > 0 && portInt < 65536 else {
+            debugMessagePublisher.send("Invalid port number")
+            return
+        }
+
+        self.port = String(portInt)
 
         guard webSocketTask == nil else {
             debugMessagePublisher.send("Already connected or connecting.")
@@ -41,7 +47,7 @@ class MQTTManager: ObservableObject {
         }
 
         let sanitizedPath = webSocketPath.hasPrefix("/") ? webSocketPath : "/" + webSocketPath
-        let urlString = "ws://\(brokerAddress):\(port)\(sanitizedPath)"
+        let urlString = "ws://\(brokerAddress):\(portInt)\(sanitizedPath)"
         guard let url = URL(string: urlString) else {
             debugMessagePublisher.send("Invalid URL.")
             return
