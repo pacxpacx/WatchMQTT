@@ -1,3 +1,4 @@
+#if os(watchOS)
 import Foundation
 import WatchConnectivity
 
@@ -33,3 +34,4 @@ class WatchConnectivityManager: NSObject, ObservableObject, WCSessionDelegate {
         }
     }
 }
+#endif
